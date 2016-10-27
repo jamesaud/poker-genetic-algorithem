@@ -1,5 +1,5 @@
 # B351FinalProject
-AI project to use Computer Vision to do something...
+AI project to use a Neural Network to do something...
 
 Ben Boskin
 
