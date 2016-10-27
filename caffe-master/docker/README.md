@@ -69,3 +69,15 @@ docker run -ti --volume=$(pwd):/workspace caffe:cpu /bin/bash
 
 Type 'ls' to see the shared directory.
 
+
+If you get an error when running docker, try this to fix it:
+
+```
+docker-machine start default
+```
+
+and 
+
+```
+eval "$(docker-machine env default)"
+```
