@@ -2,5 +2,7 @@
 AI project to use Computer Vision to do something...
 
 Ben Boskin
+
 James Audretsch
-Dilo ________
+
+Dilo Zhi
