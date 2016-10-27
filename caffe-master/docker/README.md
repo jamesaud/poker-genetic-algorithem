@@ -55,7 +55,17 @@ To enter the docker container, run
 docker run -ti caffe:cpu /bin/bash
 ```
 
+You'll begin in the 'workspace' directory which is empty. Type 'cd ..' to go back one folder.
+
 To exit the container and return to your host machine, type
 ```
 exit
 ```
+
+To mount your current location into docker, run the command
+```
+docker run -ti --volume=$(pwd):/workspace caffe:cpu /bin/bash
+```
+
+Type 'ls' to see the shared directory.
+
