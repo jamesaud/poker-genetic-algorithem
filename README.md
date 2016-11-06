@@ -17,6 +17,9 @@ Evaluation a poker hand: https://github.com/worldveil/deuces
 
 Poker Hand Game: https://pypi.python.org/pypi/PokerCards 
 
+
+#Docker
+
 To run with docker: 
 
 >docker build --tag poker .
