@@ -1,8 +1,8 @@
-import unittest
+import tests
 
 import caffe
 
-class TestLayerTypeList(unittest.TestCase):
+class TestLayerTypeList(tests.TestCase):
 
     def test_standard_types(self):
         #removing 'Data' from list 

@@ -1,7 +1,7 @@
-FROM python:3.5
+FROM python:2.7
 
-RUN pip3 install deuces
+RUN pip install deuces
 
-RUN pip3 install pokercards
+RUN pip install pokercards
 
-RUN pip3 install termcolor
+RUN pip install termcolor

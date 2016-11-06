@@ -1,4 +1,4 @@
-import unittest
+import tests
 import tempfile
 import os
 import six
@@ -38,9 +38,9 @@ def python_param_net_file():
         return f.name
 
 
-@unittest.skipIf('Python' not in caffe.layer_type_list(),
+@tests.skipIf('Python' not in caffe.layer_type_list(),
     'Caffe built without Python layer support')
-class TestLayerWithParam(unittest.TestCase):
+class TestLayerWithParam(tests.TestCase):
     def setUp(self):
         net_file = python_param_net_file()
         self.net = caffe.Net(net_file, caffe.TRAIN)

@@ -1,4 +1,4 @@
-import unittest
+import tests
 import tempfile
 import os
 import numpy as np
@@ -35,7 +35,7 @@ def simple_net_file(num_output):
     return f.name
 
 
-class TestNet(unittest.TestCase):
+class TestNet(tests.TestCase):
     def setUp(self):
         self.num_output = 13
         net_file = simple_net_file(self.num_output)
@@ -122,7 +122,7 @@ class TestNet(unittest.TestCase):
                 self.assertEqual(abs(self.net.params[name][i].data
                     - net2.params[name][i].data).sum(), 0)
 
-class TestLevels(unittest.TestCase):
+class TestLevels(tests.TestCase):
 
     TEST_NET = """
 layer {
@@ -193,7 +193,7 @@ layer {
         self.check_net(net, ['NoLevel', 'Level1Only', 'Level>=0', 'Level>=1'])
 
 
-class TestStages(unittest.TestCase):
+class TestStages(tests.TestCase):
 
     TEST_NET = """
 layer {
@@ -262,7 +262,7 @@ layer {
         self.check_net(net, ['A', 'B', 'AorB', 'AandB'])
 
 
-class TestAllInOne(unittest.TestCase):
+class TestAllInOne(tests.TestCase):
 
     TEST_NET = """
 layer {

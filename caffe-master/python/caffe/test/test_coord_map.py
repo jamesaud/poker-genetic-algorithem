@@ -1,4 +1,4 @@
-import unittest
+import tests
 
 import numpy as np
 import random
@@ -31,7 +31,7 @@ def coord_net_spec(ks=3, stride=1, pad=0, pool=2, dstride=2, dpad=0):
     return n
 
 
-class TestCoordMap(unittest.TestCase):
+class TestCoordMap(tests.TestCase):
     def setUp(self):
         pass
 

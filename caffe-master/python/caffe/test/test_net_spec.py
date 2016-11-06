@@ -1,4 +1,4 @@
-import unittest
+import tests
 import tempfile
 import caffe
 from caffe import layers as L
@@ -48,7 +48,7 @@ def silent_net():
     n.silence_data2 = L.Silence(n.data2, ntop=0)
     return n.to_proto()
 
-class TestNetSpec(unittest.TestCase):
+class TestNetSpec(tests.TestCase):
     def load_net(self, net_proto):
         f = tempfile.NamedTemporaryFile(mode='w+', delete=False)
         f.write(str(net_proto))

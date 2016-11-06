@@ -1,9 +1,9 @@
 import numpy as np
-import unittest
+import tests
 
 import caffe
 
-class TestBlobProtoToArray(unittest.TestCase):
+class TestBlobProtoToArray(tests.TestCase):
 
     def test_old_format(self):
         data = np.zeros((10,10))
@@ -41,7 +41,7 @@ class TestBlobProtoToArray(unittest.TestCase):
         self.assertEqual(arr, 123)
 
 
-class TestArrayToDatum(unittest.TestCase):
+class TestArrayToDatum(tests.TestCase):
 
     def test_label_none_size(self):
         # Set label

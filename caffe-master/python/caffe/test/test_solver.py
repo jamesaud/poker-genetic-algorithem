@@ -1,4 +1,4 @@
-import unittest
+import tests
 import tempfile
 import os
 import numpy as np
@@ -8,7 +8,7 @@ import caffe
 from test_net import simple_net_file
 
 
-class TestSolver(unittest.TestCase):
+class TestSolver(tests.TestCase):
     def setUp(self):
         self.num_output = 13
         net_f = simple_net_file(self.num_output)

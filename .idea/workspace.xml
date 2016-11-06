@@ -2,15 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="43f54c2a-3cac-4ad3-8bf0-39636731ae44" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/.travis.yml" afterPath="$PROJECT_DIR$/caffe-master/.travis.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/examples/finetune_flickr_style/assemble_data.py" afterPath="$PROJECT_DIR$/caffe-master/examples/finetune_flickr_style/assemble_data.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/examples/pycaffe/caffenet.py" afterPath="$PROJECT_DIR$/caffe-master/examples/pycaffe/caffenet.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/examples/pycaffe/layers/pascal_multilabel_datalayers.py" afterPath="$PROJECT_DIR$/caffe-master/examples/pycaffe/layers/pascal_multilabel_datalayers.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/scripts/cpp_lint.py" afterPath="$PROJECT_DIR$/caffe-master/scripts/cpp_lint.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/src/caffe/test/test_data/generate_sample_data.py" afterPath="$PROJECT_DIR$/caffe-master/src/caffe/test/test_data/generate_sample_data.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/tools/extra/parse_log.py" afterPath="$PROJECT_DIR$/caffe-master/tools/extra/parse_log.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Evaluator.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Player.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Dockerfile" afterPath="$PROJECT_DIR$/Dockerfile" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_coord_map.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_coord_map.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_io.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_io.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_layer_type_list.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_layer_type_list.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_net.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_net.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_net_spec.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_net_spec.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_python_layer.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_python_layer.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_python_layer_with_param_str.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_python_layer_with_param_str.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_solver.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_solver.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test.py" afterPath="$PROJECT_DIR$/test.py" />
     </list>
     <ignored path="B351FinalProject.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,22 +36,36 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test.py">
+      <file leaf-file-name="Dockerfile" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Dockerfile">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="90">
+              <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Dockerfile" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Dockerfile">
+      <file leaf-file-name="Player.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Player.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="8" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="8" />
-              <folding />
+            <state relative-caret-position="390">
+              <caret line="103" column="24" selection-start-line="103" selection-start-column="24" selection-end-line="103" selection-end-column="24" />
+              <folding>
+                <element signature="e#0#30#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tests.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="24" column="49" selection-start-line="24" selection-start-column="35" selection-end-line="24" selection-end-column="49" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -55,6 +74,18 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Dockerfile" />
+        <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/unittest.py" />
+        <option value="$PROJECT_DIR$/Evaluator.py" />
+        <option value="$PROJECT_DIR$/tests.py" />
+        <option value="$PROJECT_DIR$/Player.py" />
+      </list>
+    </option>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
   <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
@@ -346,7 +377,7 @@
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32861635" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32739726" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -378,7 +409,35 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Dockerfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="49" selection-start-line="24" selection-start-column="35" selection-end-line="24" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Evaluator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -386,11 +445,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Dockerfile">
+    <entry file="file://$PROJECT_DIR$/Player.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="8" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="8" />
-          <folding />
+        <state relative-caret-position="390">
+          <caret line="103" column="24" selection-start-line="103" selection-start-column="24" selection-end-line="103" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
