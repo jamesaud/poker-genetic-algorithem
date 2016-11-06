@@ -16,3 +16,9 @@ Explanation of genetic programming in python: http://lethain.com/genetic-algorit
 Evaluation a poker hand: https://github.com/worldveil/deuces
 
 Poker Hand Game: https://pypi.python.org/pypi/PokerCards 
+
+To run with docker: 
+
+>docker build --tag poker .
+
+>docker run -it -v $(pwd):/code --name pokerplayer poker /bin/bash
