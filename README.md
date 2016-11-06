@@ -24,7 +24,11 @@ To run with docker:
 
 >docker build --tag poker .
 
+The command above builds the docker image.
+
 >docker run -it -v $(pwd):/code --name pokerplayer poker /bin/bash
+
+The command above will put you inside a vm, and will mount your current directory into it. Now you can edit files on your local machine while you run commands in docker.
 
 To enter your docker vm, type:
 >docker exec -it pokerplayer /bin/bash
