@@ -24,7 +24,7 @@ data = data.astype('float32')
 label = 1 + np.arange(num_rows)[:, np.newaxis]
 label = label.astype('float32')
 
-# We add an extra label2 dataset to test HDF5 layer's ability
+# We add an extra label2 dataset to test.py HDF5 layer's ability
 # to handle arbitrary number of output ("top") Blobs.
 label2 = label + 1
 
@@ -53,8 +53,8 @@ with h5py.File(script_dir + '/sample_data_2_gzip.h5', 'w') as f:
     )
 
 with open(script_dir + '/sample_data_list.txt', 'w') as f:
-    f.write('src/caffe/test/test_data/sample_data.h5\n')
-    f.write('src/caffe/test/test_data/sample_data_2_gzip.h5\n')
+    f.write('src/caffe/test.py/test_data/sample_data.h5\n')
+    f.write('src/caffe/test.py/test_data/sample_data_2_gzip.h5\n')
 
 # Generate GradientBasedSolver solver_data.h5
 
@@ -78,4 +78,4 @@ with h5py.File(script_dir + '/solver_data.h5', 'w') as f:
     f['targets'] = targets
 
 with open(script_dir + '/solver_data_list.txt', 'w') as f:
-    f.write('src/caffe/test/test_data/solver_data.h5\n')
+    f.write('src/caffe/test.py/test_data/solver_data.h5\n')

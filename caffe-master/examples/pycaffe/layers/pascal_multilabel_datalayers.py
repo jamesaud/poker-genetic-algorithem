@@ -198,7 +198,7 @@ def check_params(params):
     A utility function to check the parameters for the data layers.
     """
     assert 'split' in params.keys(
-    ), 'Params must include split (train, val, or test).'
+    ), 'Params must include split (train, val, or test.py).'
 
     required = ['batch_size', 'pascal_root', 'im_shape']
     for r in required:

@@ -73,7 +73,7 @@ def parse_log(path_to_log):
 
 def parse_line_for_net_output(regex_obj, row, row_dict_list,
                               line, iteration, seconds, learning_rate):
-    """Parse a single line for training or test output
+    """Parse a single line for training or test.py output
 
     Returns a a tuple with (row_dict_list, row)
     row: may be either a new row or an augmented version of the current row
@@ -116,7 +116,7 @@ def parse_line_for_net_output(regex_obj, row, row_dict_list,
 def fix_initial_nan_learning_rate(dict_list):
     """Correct initial value of learning rate
 
-    Learning rate is normally not printed until after the initial test and
+    Learning rate is normally not printed until after the initial test.py and
     training step, which means the initial testing and training rows have
     LearningRate = NaN. Fix this by copying over the LearningRate from the
     second row, if it exists.
@@ -131,14 +131,14 @@ def save_csv_files(logfile_path, output_dir, train_dict_list, test_dict_list,
     """Save CSV files to output_dir
 
     If the input log file is, e.g., caffe.INFO, the names will be
-    caffe.INFO.train and caffe.INFO.test
+    caffe.INFO.train and caffe.INFO.test.py
     """
 
     log_basename = os.path.basename(logfile_path)
     train_filename = os.path.join(output_dir, log_basename + '.train')
     write_csv(train_filename, train_dict_list, delimiter, verbose)
 
-    test_filename = os.path.join(output_dir, log_basename + '.test')
+    test_filename = os.path.join(output_dir, log_basename + '.test.py')
     write_csv(test_filename, test_dict_list, delimiter, verbose)
 
 

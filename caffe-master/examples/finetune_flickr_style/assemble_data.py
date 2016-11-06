@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
     # Only keep rows with valid images, and write out training file lists.
     df = df[results]
-    for split in ['train', 'test']:
+    for split in ['train', 'test.py']:
         split_df = df[df['_split'] == split]
         filename = os.path.join(training_dirname, '{}.txt'.format(split))
         split_df[['image_filename', 'label']].to_csv(

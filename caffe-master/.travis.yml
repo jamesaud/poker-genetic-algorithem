@@ -8,7 +8,7 @@ env:
   global:
     - NUM_THREADS=4
   matrix:
-    # Use a build matrix to test many builds in parallel
+    # Use a build matrix to test.py many builds in parallel
     # envvar defaults:
     #   WITH_CMAKE: false
     #   WITH_PYTHON3: false
@@ -46,7 +46,7 @@ before_script:
 
 script:
   - ./scripts/travis/build.sh
-  - ./scripts/travis/test.sh
+  - ./scripts/travis/test.py.sh
 
 notifications:
 # Emails are sent to the committer's git-configured email address by default,

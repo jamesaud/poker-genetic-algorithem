@@ -2177,8 +2177,8 @@ class _NestingState(object):
       filename: The name of the current file.
       error: The function to call with any errors found.
     """
-    # Note: This test can result in false positives if #ifdef constructs
-    # get in the way of brace matching. See the testBuildClass test in
+    # Note: This test.py can result in false positives if #ifdef constructs
+    # get in the way of brace matching. See the testBuildClass test.py in
     # cpplint_unittest.py for an example of this.
     for obj in self.stack:
       if isinstance(obj, _ClassInfo):
@@ -2912,7 +2912,7 @@ def CheckSpacing(filename, clean_lines, linenum, nesting_state, error):
   # Except after an opening paren, or after another opening brace (in case of
   # an initializer list, for instance), you should have spaces before your
   # braces. And since you should never have braces at the beginning of a line,
-  # this is an easy test.
+  # this is an easy test.py.
   match = Match(r'^(.*[^ ({]){', line)
   if match:
     # Try a bit harder to check for brace initialization.  This
@@ -3460,7 +3460,7 @@ def CheckStyle(filename, clean_lines, linenum, file_extension, nesting_state,
                error):
   """Checks rules from the 'C++ style rules' section of cppguide.html.
 
-  Most of these rules are hard to test (naming, comment style), but we
+  Most of these rules are hard to test.py (naming, comment style), but we
   do what we can.  In particular we check for 2-space indents, line lengths,
   tab usage, spaces inside code, etc.
 
@@ -3592,7 +3592,7 @@ def _DropCommonSuffixes(filename):
   Returns:
     The filename with the common suffix removed.
   """
-  for suffix in ('test.cc', 'regtest.cc', 'unittest.cc',
+  for suffix in ('test.py.cc', 'regtest.cc', 'unittest.cc',
                  'inl.h', 'impl.h', 'internal.h'):
     if (filename.endswith(suffix) and len(filename) > len(suffix) and
         filename[-len(suffix) - 1] in ('-', '_')):
@@ -3601,13 +3601,13 @@ def _DropCommonSuffixes(filename):
 
 
 def _IsTestFilename(filename):
-  """Determines if the given filename has a suffix that identifies it as a test.
+  """Determines if the given filename has a suffix that identifies it as a test.py.
 
   Args:
     filename: The input filename.
 
   Returns:
-    True if 'filename' looks like a test, False otherwise.
+    True if 'filename' looks like a test.py, False otherwise.
   """
   if (filename.endswith('_test.cc') or
       filename.endswith('_unittest.cc') or
@@ -3835,7 +3835,7 @@ def CheckLanguage(filename, clean_lines, linenum, file_extension,
                   include_state, nesting_state, error):
   """Checks rules from the 'C++ language rules' section of cppguide.html.
 
-  Some of these rules are hard to test (function overloading, using
+  Some of these rules are hard to test.py (function overloading, using
   uint32 inappropriately), but we do the best we can.
 
   Args:

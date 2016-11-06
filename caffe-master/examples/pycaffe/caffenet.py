@@ -48,7 +48,7 @@ def make_net():
     with open('train.prototxt', 'w') as f:
         print(caffenet('/path/to/caffe-train-lmdb'), file=f)
 
-    with open('test.prototxt', 'w') as f:
+    with open('test.py.prototxt', 'w') as f:
         print(caffenet('/path/to/caffe-val-lmdb', batch_size=50, include_acc=True), file=f)
 
 if __name__ == '__main__':
