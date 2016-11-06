@@ -33,7 +33,6 @@ class Player(object):
         self.hand.cards.append(card)
 
     def bet(self):
-        print("BETTING")
         bet = self.make_decision()
         if bet == -1:
             return -1
@@ -42,6 +41,8 @@ class Player(object):
         return bet
 
     def make_decision(self):
+        if self.money <= 0:
+            return 0
         return 10
 
     def empty_hand(self):
@@ -71,7 +72,9 @@ class Game(object):
         self.anti = anti
         self.bet = anti    # Current bet at the table
         self.turn = 0   # Index of player's turn
-        self.highest_bidder = None # Player with highest bid
+        self.highest_bidder = self.players[0] # Player with highest bid
+        self.round_started = False
+        self.game_over = False
 
     def create_players(self, number):
         player_list = [] # List of Players
@@ -98,14 +101,16 @@ class Game(object):
 
 
     def player_bet(self):
-        if self.active_players[self.turn] == self.highest_bidder:
+        if self.active_players[self.turn] == self.highest_bidder and self.round_started:
             self.bet = 0
             self.turn = 0
+            self.round_started = False
             return False
 
         else:
             player = self.active_players[self.turn]
             bet = player.bet()
+            self.round_started = True
 
             # Fold, Match, or Raise
             if bet == -1: # Fold
@@ -114,8 +119,10 @@ class Game(object):
 
             elif bet == self.bet:
                 self.turn = (self.turn + 1) % len(self.active_players)
+                self.pot += bet
 
             else:
+                self.pot += bet
                 self.bet = bet
                 self.highest_bidder = player
                 self.turn = (self.turn + 1) % len(self.active_players)
@@ -124,9 +131,6 @@ class Game(object):
 
 
     def run_round(self):
-        print(self.board)
-        self.print_players()
-        print('')
 
         while self.player_bet():
             pass
@@ -159,21 +163,33 @@ class Game(object):
 
 
     def reset(self):
+
         self.deck = Deck()
         self.deck.shuffle()
         self.board = []
         self.pot = 0
         self.bet = self.anti  # Current bet at the table
-        self.highest_bidder = None  # Player with highest bid
+        self.round_started = False
 
+
+        new_players = []
         for player in self.players:
             player.empty_hand()
+            if player.money > 0:
+                new_players.append(player)
+
+        self.players = new_players
+
+        if len(self.players) == 1:
+            self.game_over = True
 
         def rotate_players():
             first_player = self.players.pop(0)
             self.players.append(first_player)
 
         rotate_players()
+        self.highest_bidder = self.players[0]  # Player with highest bid
+
         self.active_players = self.players
 
 
@@ -181,15 +197,19 @@ class Game(object):
         return [card_to_string(card) for card in self.board]
 
 
-
+    def print_game(self):
+        for player in self.players:
+            print(player)
 
 
 def main():
     game = Game(4)
-    game.deal()
 
-    game.run_round()
-
+    while not game.game_over:
+        game.deal()
+        game.run_round()
+        game.print_game()
+        print ('')
 
 
 

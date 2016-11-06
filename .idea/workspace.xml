@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="43f54c2a-3cac-4ad3-8bf0-39636731ae44" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Evaluator.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Player.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Dockerfile" afterPath="$PROJECT_DIR$/Dockerfile" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_coord_map.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_coord_map.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_io.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_io.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_layer_type_list.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_layer_type_list.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_net.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_net.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_net_spec.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_net_spec.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_python_layer.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_python_layer.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_python_layer_with_param_str.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_python_layer_with_param_str.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_solver.py" afterPath="$PROJECT_DIR$/caffe-master/python/caffe/test/test_solver.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test.py" afterPath="$PROJECT_DIR$/test.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Player.py" afterPath="$PROJECT_DIR$/Player.py" />
     </list>
     <ignored path="B351FinalProject.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -49,8 +36,8 @@
       <file leaf-file-name="Player.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Player.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="103" column="24" selection-start-line="103" selection-start-column="24" selection-end-line="103" selection-end-column="24" />
+            <state relative-caret-position="402">
+              <caret line="205" column="17" selection-start-line="205" selection-start-column="17" selection-end-line="205" selection-end-column="17" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -447,8 +434,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Player.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="103" column="24" selection-start-line="103" selection-start-column="24" selection-end-line="103" selection-end-column="24" />
+        <state relative-caret-position="402">
+          <caret line="205" column="17" selection-start-line="205" selection-start-column="17" selection-end-line="205" selection-end-column="17" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
