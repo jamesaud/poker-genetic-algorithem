@@ -1,0 +1,26 @@
+from pokercards.cards import *
+
+def main():
+    deck = Deck()
+    deck.shuffle()
+    cards1 = [deck.pop(), deck.pop()]
+    cards2 = [deck.pop(), deck.pop()]
+    hand1 = PokerHand(cards1, True)
+    hand2 = PokerHand(cards2, True)
+    print hand1.cards
+    print hand1.hand_rank
+    print hand2.cards
+    print hand2.hand_rank
+    tableCards = [deck.pop(), deck.pop(), deck.pop(), deck.pop(), deck.pop()]
+    hand1.cards = hand1.cards + tableCards
+    hand2.cards = hand2.cards + tableCards
+    hand1.evaluate()
+    hand2.evaluate()
+    print hand1.cards
+    print hand1.hand_rank
+    print hand2.cards
+    print hand2.hand_rank
+    
+if __name__ == '__main__' :
+    main()
+    
