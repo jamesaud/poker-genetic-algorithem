@@ -1,9 +1,6 @@
 from pokercards.cards import *
 import deuces
 
-
-
-
 evaluator = deuces.Evaluator()
 
 def evaluate(board, hand):
@@ -14,8 +11,6 @@ def evaluate(board, hand):
 # Takes Card Object, converts to string for evaluator
 def card_to_string(card):
     return card.rank + card.suit.lower()
-
-
 
 class Player(object):
     """
@@ -32,18 +27,50 @@ class Player(object):
     def add_card(self, card):
         self.hand.cards.append(card)
 
+    def make_bet(self):
+        return 10
+
+    def hand_good_enough(self):
+        board = self.game.board_to_str()
+        if (board == []):
+            return 1
+        else:
+            hand = self.hand_to_str()
+            value = evaluate(board, hand)
+            if (value >  6000):
+                return 0
+            if (value > 4000):
+                return 1
+            else:
+                return 2
+
     def bet(self):
         bet = self.make_decision()
         if bet == -1:
             return -1
-
+        if (bet > self.money):
+            bet = self.money
         self.money -= bet
         return bet
 
     def make_decision(self):
         if self.money <= 0:
             return 0
-        return 10
+        choose = self.hand_good_enough()
+        if (self.game.bet == 0):
+            if (choose == 2):
+                return 5
+            if (choose == 1):
+                return 2
+            else:
+                return 0
+        else:
+            if (choose == 2):
+                return self.game.bet + 2
+            if (choose == 1):
+                return self.game.bet
+            else:
+                return -1
 
     def empty_hand(self):
         self.hand = PokerHand([], False)
@@ -101,7 +128,7 @@ class Game(object):
 
 
     def player_bet(self):
-        if self.active_players[self.turn] == self.highest_bidder and self.round_started:
+        if (self.active_players[self.turn] == self.highest_bidder) and self.round_started:
             self.bet = 0
             self.turn = 0
             self.round_started = False
@@ -115,7 +142,7 @@ class Game(object):
             # Fold, Match, or Raise
             if bet == -1: # Fold
                 del self.active_players[self.turn]
-                self.turn % len(self.active_players)
+                self.turn = self.turn % len(self.active_players)
 
             elif bet == self.bet:
                 self.turn = (self.turn + 1) % len(self.active_players)
@@ -144,6 +171,7 @@ class Game(object):
             self.run_round()
 
         else:
+            self.print_game()
             self.finish()
 
     def find_best_player(self):
@@ -210,10 +238,6 @@ def main():
         game.run_round()
         game.print_game()
         print ('')
-
-
-
-
 
 if __name__ == '__main__':
     main()
