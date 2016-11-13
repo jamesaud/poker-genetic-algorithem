@@ -54,8 +54,16 @@ class Player(object):
         return bet
 
     def make_decision(self):
+        """
+        We should know...
+        Hand-Strength - the ranking of the hand out of 7000 from the evaluate function
+        Current bet - the current money in the pot
+        Current pot size - the current money in the pot
+        :return:
+        """
         if self.money <= 0:
             return 0
+<<<<<<< HEAD
         choose = self.hand_good_enough()
         if (self.game.bet == 0):
             if (choose == 2):
@@ -71,6 +79,10 @@ class Player(object):
                 return self.game.bet
             else:
                 return -1
+=======
+
+        return 10
+>>>>>>> bed62325d8080615121b9614ca238b7952325648
 
     def empty_hand(self):
         self.hand = PokerHand([], False)
