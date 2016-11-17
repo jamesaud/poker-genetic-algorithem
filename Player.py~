@@ -52,7 +52,7 @@ class Player(object):
             bet = self.money
         self.money -= bet
         return bet
-    """
+"""
     def make_decision_bluff_risk(self):
         board = self.game.board_to_str()
         hand = self.hand_to_str()
