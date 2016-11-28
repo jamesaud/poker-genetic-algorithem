@@ -27,75 +27,6 @@ class Player(object):
     def add_card(self, card):
         self.hand.cards.append(card)
 
-    def make_bet(self):
-        return 10
-
-    def hand_good_enough(self):
-        board = self.game.board_to_str()
-        if (board == []):
-            return 1
-        else:
-            hand = self.hand_to_str()
-            value = evaluate(board, hand)
-            if (value >  6000):
-                return 0
-            if (value > 4000):
-                return 1
-            else:
-                return 2
-
-    def bet(self):
-        bet = self.make_decision()
-        if bet == -1:
-            return -1
-        if (bet > self.money):
-            bet = self.money
-        self.money -= bet
-        return bet
-"""
-    def make_decision_bluff_risk(self):
-        board = self.game.board_to_str()
-        hand = self.hand_to_str()
-        value = evaluate(board, hand)
-        low_threshold = 5000 + (1000 * self.bluff)
-        high_threshold = 3000 + (1000 * self.bluff)
-        if (value > low_threshold):
-            bet = 0 + (10 * self.risk)
-            if (bet > 0):
-                return bet
-            return 0
-        if (value > high_threshold):
-            return 10 + (10 * self.risk)
-        else: return 20 + (10 * self.risk)            
-   """     
-    def make_decision(self):
-        """
-        We should know...
-        Hand-Strength - the ranking of the hand out of 7000 from the evaluate function
-        Current bet - the current money in the pot
-        Current pot size - the current money in the pot
-        :return:
-        """
-        if self.money <= 0:
-            return 0
-#<<<<<<< HEAD
-        choose = self.hand_good_enough()
-        if (self.game.bet == 0):
-            if (choose == 2):
-                return 5
-            if (choose == 1):
-                return 2
-            else:
-                return 0
-        else:
-            if (choose == 2):
-                return self.game.bet + 2
-            if (choose == 1):
-                return self.game.bet
-            else:
-                return -1
-#>>>>>>> bed62325d8080615121b9614ca238b7952325648
-
     def empty_hand(self):
         self.hand = PokerHand([], False)
 
@@ -151,7 +82,7 @@ class Game(object):
             print(player)
 
 
-    def player_bet(self):
+    def player_turn(self):
         if (self.active_players[self.turn] == self.highest_bidder) and self.round_started:
             self.bet = 0
             self.turn = 0
@@ -159,8 +90,11 @@ class Game(object):
             return False
 
         else:
+            if len(self.active_players) <= 1:
+                return False
+            print self.active_players
             player = self.active_players[self.turn]
-            bet = player.bet()
+            bet = self.player_bet(player)
             self.round_started = True
 
             # Fold, Match, or Raise
@@ -180,10 +114,32 @@ class Game(object):
 
             return True
 
+    def player_bet(self, player):
+        def value_bet():
+            if (self.board == []):
+                return 0
+            value = 7462 - evaluate(self.board_to_str(), player.hand_to_str()) + (1000 * player.bluff)
+            pot = self.pot
+            money = player.money
+            bet = value / 7462
+            if (pot > (money / 4)):
+                bet = (bet + (bet * player.risk)) * 50
+            else:
+                bet = (bet + (bet * player.risk)) * 25
+            return bet
+        bet = value_bet()
+        if (bet > player.money):
+            bet = player.money
+        if (bet < 5):
+            bet = 0
+        if (bet < self.bet):
+            return -1
+        player.money -= bet
+        return bet
 
     def run_round(self):
 
-        while self.player_bet():
+        while self.player_turn():
             pass
 
         if len(self.board) == 0:
