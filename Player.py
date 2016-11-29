@@ -49,7 +49,7 @@ class Player(object):
 
 class Game(object):
 
-    def __init__(self, number_players, anti=10):
+    def __init__(self, number_players, anti=0):
         # Initialize Deck
         self.deck = Deck()
         self.deck.shuffle()
@@ -130,29 +130,40 @@ class Game(object):
         return True
 
     def player_bet(self, player):
-        """
         def value_bet():
             if (self.board == []):
-                return 0
+                if (player.hand.cards[0].rank == player.hand.cards[1].rank):
+                    return 4
+                if (player.hand.cards[1].rank == 'K' or player.hand.cards[1].rank == 'J' or 
+                    player.hand.cards[1].rank == 'Q' or player.hand.cards[1].rank == 'A' or
+                    player.hand.cards[0].rank == 'K' or player.hand.cards[0].rank == 'J' or 
+                    player.hand.cards[0].rank == 'Q' or player.hand.cards[0].rank == 'A'):
+                    return 3
+                elif (self.bet != 0):
+                    if (player.risk > 0):
+                        return self.bet
+                    else: return bet_status.FOLD
+                else: return 0
             value = 7462 - evaluate(self.board_to_str(), player.hand_to_str()) + (1000 * player.bluff)
             pot = self.pot
             money = player.money
             bet = value / 7462
+            threshold = value - (1000 * player.risk)
+            if (threshold > 6000):
+                return bet_status.FOLD
             if (pot > (money / 4)):
-                bet = (bet + (bet * player.risk)) * 50
+                bet = (int)(bet + (bet * player.risk)) * 50
             else:
-                bet = (bet + (bet * player.risk)) * 25
+                bet = (int)(bet + (bet * player.risk)) * 25
             return bet
         bet = value_bet()
-        if (bet > player.money):
+        if (bet == bet_status.FOLD):
+            return bet
             bet = player.money
-        if (bet < 5):
+        if (bet < 2):
             bet = 0
-        if (bet < self.bet):
-            return -1
-        """
-        import random
-        bet = random.choice([10, 10, 10, 10, 10, 10, 10, 10, bet_status.FOLD])
+        #import random
+        #bet = random.choice([10, 10, 10, 10, 10, 10, 10, 10, bet_status.FOLD])
         return bet
 
     def run_round(self):
@@ -230,6 +241,8 @@ class Game(object):
 
     def print_game(self):
         print("\n")
+        print("TABLE CARDS:")
+        print(self.board)
         print("PLAYERS:")
         for player in self.players:
             print(player)
