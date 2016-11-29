@@ -16,7 +16,6 @@ class bet_status(object):
     FOLD = "FOLD"
 
 
-
 class Player(object):
     """
     hand: List of Cards
@@ -27,6 +26,7 @@ class Player(object):
         self.bluff = bluff
         self.risk = risk
         self.money = money
+        self.owes = 0
 
     def add_card(self, card):
         self.hand.cards.append(card)
@@ -57,7 +57,6 @@ class Game(object):
 
         self.players = self.create_players(number_players)
         self.active_players = self.players
-        self.inactive_players = set()
 
         self.pot = 0
         self.anti = anti
@@ -96,26 +95,31 @@ class Game(object):
     """
     def make_player_turn(self, bet, player):
 
-        if bet < self.bet:
+        if bet < player.owes:
             bet = bet_status.FOLD
 
         # Fold, Match, or Raise
         if bet == bet_status.FOLD: # Fold
-            del self.active_players[self.turn]
+            self.active_players.remove(self.current_turn())
             self.turn = self.turn % len(self.active_players)
             return None
 
-        elif bet == self.bet:
+        elif bet == player.owes:
             self.turn = (self.turn + 1) % len(self.active_players)
 
 
         else:
-            self.bet = bet
             self.highest_bidder = player
             self.turn = (self.turn + 1) % len(self.active_players)
 
+            for play in self.active_players:
+                if play != player:
+                    play.owes += (bet - player.owes)
+
         self.pot += bet
         player.money -= bet
+
+
 
 
     def player_bet(self, player):
@@ -151,8 +155,6 @@ class Game(object):
             bet = player.money
         if (bet < 2):
             bet = 0
-        #import random
-        #bet = random.choice([10, 10, 10, 10, 10, 10, 10, 10, bet_status.FOLD])
         return bet
 
     def enforce_bet(self, bet, player, petty=10):
@@ -167,13 +169,17 @@ class Game(object):
         :param player: Player, the current player who is betting
         :return: int, the enforced bet
         """
+
+        if (bet == bet_status.FOLD) and len(self.active_players) == 1:
+            bet = self.owes
+
         if bet < petty:
             bet = 0
 
         if bet > player.money:
             bet = player.money
 
-        if bet < self.bet:
+        if bet < player.owes:
             bet = bet_status.FOLD
 
         return bet
@@ -197,7 +203,6 @@ class Game(object):
             bet = self.enforce_bet(bet, player, 2)
             self.make_player_turn(bet, player)
 
-
         if len(self.board) == 0:
             self.add_to_board(initial=True)
             self.run_round()
@@ -207,7 +212,7 @@ class Game(object):
             self.run_round()
 
         else:
-            self.print_game()
+            #self.print_game()
             self.finish()
 
     def find_best_player(self):
@@ -223,6 +228,7 @@ class Game(object):
     def finish(self):
         best_player = self.find_best_player()
         best_player.money += self.pot
+        self.print_game()
         self.reset()
 
 
@@ -231,34 +237,32 @@ class Game(object):
         self.deck.shuffle()
         self.board = []
         self.pot = 0
-        self.bet = self.anti  # Current bet at the table
         self.round_started = True
 
 
-        def inactive_players():
-            new_players = []
-            inactive_players = []
+        def remove_players():
+            active_players = []
             for player in self.players:
-                player.empty_hand()
                 if player.money > 0:
-                    new_players.append(player)
-                else:
-                    inactive_players.append(player)
-            return new_players, inactive_players
+                    active_players.append(player)
+            return active_players
 
-        players, inactive_players = inactive_players()
+        self.active_players = remove_players()
 
-        self.players = players
-        self.inactive_players |= set(inactive_players)
+
+        for player in self.players:
+            player.empty_hand()
+            player.owes = self.anti
+
 
         if len(self.players) == 1:
             self.game_over = True
 
-        def rotate_players():
-            first_player = self.players.pop(0)
-            self.players.append(first_player)
 
-        rotate_players()
+        # Rotate Players
+        first_player = self.players.pop(0)
+        self.players.append(first_player)
+
         self.highest_bidder = self.players[0]  # Player with highest bid
         self.active_players = self.players
 
@@ -274,9 +278,7 @@ class Game(object):
         print("PLAYERS:")
         for player in self.players:
             print(player)
-        print("INACTIVE PLAYERS")
-        for player in self.inactive_players:
-            print(player)
+
 
 
 def main():
