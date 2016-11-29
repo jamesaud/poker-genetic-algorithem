@@ -206,8 +206,14 @@ class Game(object):
 
 
     def print_game(self):
-        for player in self.players:
-            print(player)
+        print '***************************'
+
+        player = self.find_best_player()
+        print player + ' won the hand with this hand:'
+        hand = player.hand_cards
+        hand = [card_to_string(card) for card in hand]
+
+        print '***************************'
 
 
 def main():
