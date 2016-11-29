@@ -93,19 +93,9 @@ class Game(object):
 
 
     """
-    Returns the next players turn
+    Changs the players turn and removes any players who fold
     """
-    def player_turn(self):
-        if len(self.active_players) <= 1:
-            return False
-
-        if (self.active_players[self.turn] == self.highest_bidder) and not self.round_started:
-            return False
-
-        self.round_started = False
-
-        player = self.active_players[self.turn]
-        bet = self.player_bet(player)
+    def make_player_turn(self, bet, player):
 
         if bet < self.bet:
             bet = bet_status.FOLD
@@ -114,20 +104,20 @@ class Game(object):
         if bet == bet_status.FOLD: # Fold
             del self.active_players[self.turn]
             self.turn = self.turn % len(self.active_players)
+            return None
 
         elif bet == self.bet:
             self.turn = (self.turn + 1) % len(self.active_players)
-            self.pot += bet
-            player.money -= bet
+
 
         else:
-            player.money -= bet
-            self.pot += bet
             self.bet = bet
             self.highest_bidder = player
             self.turn = (self.turn + 1) % len(self.active_players)
 
-        return True
+        self.pot += bet
+        player.money -= bet
+
 
     def player_bet(self, player):
         """
@@ -155,9 +145,48 @@ class Game(object):
         bet = random.choice([10, 10, 10, 10, 10, 10, 10, 10, bet_status.FOLD])
         return bet
 
+    def enforce_bet(self, bet, player, petty=10):
+        """
+        Enfore rules for the player bet.
+        1. If the bet is more than the players money, remake the bet to their max money.
+        2. If the bet is less than the current bet, force the player to fold.
+        3. If the bet is negative, force the player to bet 0.
+        0. Petty: If the raise is less than this amount, change the bet to 0 to stop infinite betting.
+
+        :param bet: int, the amount the player wants to bet
+        :param player: Player, the current player who is betting
+        :return: int, the enforced bet
+        """
+        if bet < petty:
+            bet = 0
+
+        if bet > player.money:
+            bet = player.money
+
+        if bet < self.bet:
+            bet = bet_status.FOLD
+
+        return bet
+
+
+    def current_turn(self):
+        return self.active_players[self.turn]
+
     def run_round(self):
-        while self.player_turn():
-            pass
+        while True:
+            if len(self.active_players) <= 1:
+                break
+
+            if (self.current_turn() == self.highest_bidder) and not self.round_started:
+                break
+
+            self.round_started = False
+
+            player = self.current_turn()
+            bet = self.player_bet(player)
+
+            self.make_player_turn(bet, player)
+
 
         if len(self.board) == 0:
             self.add_to_board(initial=True)
