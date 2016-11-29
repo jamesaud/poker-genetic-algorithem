@@ -114,7 +114,7 @@ class Game(object):
 
             for play in self.active_players:
                 if play != player:
-                    play.owes += bet
+                    play.owes += (bet - player.owes)
 
         self.pot += bet
         player.money -= bet
