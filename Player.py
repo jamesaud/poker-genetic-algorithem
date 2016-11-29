@@ -21,13 +21,12 @@ class Player(object):
     """
     hand: List of Cards
     """
-    def __init__(self, name, bluff, risk, money, game):
+    def __init__(self, name, bluff, risk, money):
         self.hand = PokerHand([], False)
         self.name = name
         self.bluff = bluff
         self.risk = risk
         self.money = money
-        self.game = game
 
     def add_card(self, card):
         self.hand.cards.append(card)
@@ -71,7 +70,7 @@ class Game(object):
     def create_players(self, number):
         player_list = [] # List of Players
         for i in range(number):
-            player = Player(str(i), .5, .5, 100, self)
+            player = Player(str(i), .5, .5, 100)
             player_list.append(player)
         return player_list
 
@@ -139,7 +138,7 @@ class Game(object):
             money = player.money
             bet = value / 7462
             threshold = value - (1000 * player.risk)
-            if (threshold > 6000):
+            if (threshold > 6000 and self.bet > 0):
                 return bet_status.FOLD
             if (pot > (money / 4)):
                 bet = (int)(bet + (bet * player.risk)) * 50
@@ -195,7 +194,7 @@ class Game(object):
 
             player = self.current_turn()
             bet = self.player_bet(player)
-
+            bet = self.enforce_bet(bet, player, 2)
             self.make_player_turn(bet, player)
 
 
