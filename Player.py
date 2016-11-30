@@ -63,7 +63,7 @@ class Game(object):
         self.anti = anti
         self.bet = anti    # Current bet at the table
         self.turn = 0   # Index of player's turn
-        self.highest_bidder = self.players[0] # Player with highest bid
+        self.highest_bidder = None # Player with highest bid
         self.round_started = True
         self.game_over = False
 
@@ -95,25 +95,29 @@ class Game(object):
     Changs the players turn and removes any players who fold
     """
     def make_player_turn(self, bet, player):
+        turn = self.turn
+        len_active_players = len(self.active_players)
 
         if bet < player.owes:
             bet = bet_status.FOLD
 
+
+        if (bet == bet_status.FOLD) and (player.owes == 0):
+            return None
+
         # Fold, Match, or Raise
         if bet == bet_status.FOLD: # Fold
-            print("BEFORE FOLD", self.players)
             self.active_players.remove(self.current_turn())
-            print("AFTER FOLD", self.players)
-            self.turn = self.turn % len(self.active_players)
+            self.turn = turn % len_active_players
             return None
 
         elif bet == player.owes:
-            self.turn = (self.turn + 1) % len(self.active_players)
+            self.turn = (turn + 1) % len_active_players
 
 
         else:
             self.highest_bidder = player
-            self.turn = (self.turn + 1) % len(self.active_players)
+            self.turn = (turn + 1) % len_active_players
 
             for play in self.active_players:
                 if play != player:
@@ -121,6 +125,7 @@ class Game(object):
 
         self.pot += bet
         player.money -= bet
+        player.owes = 0
 
 
 
@@ -172,12 +177,13 @@ class Game(object):
         :param player: Player, the current player who is betting
         :return: int, the enforced bet
         """
+        petty = player.owes + petty
 
         if (bet == bet_status.FOLD) and len(self.active_players) == 1:
             bet = self.owes
 
-        if bet < petty:
-            bet = 0
+        if (bet < petty):
+            bet = player.owes
 
         if bet > player.money:
             bet = player.money
@@ -193,18 +199,21 @@ class Game(object):
 
     def run_round(self):
         while True:
+            print("TURN:",self.turn)
             if len(self.active_players) <= 1:
                 break
 
-            if (self.current_turn() == self.highest_bidder) and not self.round_started:
+            if (self.current_turn() == self.highest_bidder):
                 break
 
-            self.round_started = False
 
             player = self.current_turn()
             bet = self.player_bet(player)
             bet = self.enforce_bet(bet, player, 2)
             self.make_player_turn(bet, player)
+
+            if not self.highest_bidder:
+                self.highest_bidder = player
 
         if len(self.board) == 0:
             self.add_to_board(initial=True)
@@ -240,6 +249,7 @@ class Game(object):
         self.board = []
         self.pot = 0
         self.round_started = True
+        self.turn = 0
 
 
         def remove_players():
@@ -265,7 +275,7 @@ class Game(object):
         first_player = self.active_players.pop(0)
         self.active_players.append(first_player)
 
-        self.highest_bidder = self.active_players[0]  # Player with highest bid
+        self.highest_bidder = None  # Player with highest bid
 
 
     def board_to_str(self):
