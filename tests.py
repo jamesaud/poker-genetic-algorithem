@@ -49,6 +49,7 @@ class TestGame(unittest.TestCase):
 
 
 
+
 class TestCard(unittest.TestCase):
     def test_card_to_string(self):
         self.assertEquals(card_to_string(Card('T', 'H')), 'Th')

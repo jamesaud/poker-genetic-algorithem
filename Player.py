@@ -1,5 +1,6 @@
 from pokercards.cards import *
 import deuces
+import copy
 
 evaluator = deuces.Evaluator()
 
@@ -56,7 +57,7 @@ class Game(object):
         self.board = []
 
         self.players = self.create_players(number_players)
-        self.active_players = self.players
+        self.active_players = copy.copy(self.players)
 
         self.pot = 0
         self.anti = anti
@@ -100,7 +101,9 @@ class Game(object):
 
         # Fold, Match, or Raise
         if bet == bet_status.FOLD: # Fold
+            print("BEFORE FOLD", self.players)
             self.active_players.remove(self.current_turn())
+            print("AFTER FOLD", self.players)
             self.turn = self.turn % len(self.active_players)
             return None
 
@@ -205,7 +208,6 @@ class Game(object):
             self.run_round()
 
         else:
-            #self.print_game()
             self.finish()
 
     def find_best_player(self):
@@ -248,16 +250,15 @@ class Game(object):
             player.owes = self.anti
 
 
-        if len(self.players) == 1:
+        if len(self.active_players) == 1:
             self.game_over = True
 
 
         # Rotate Players
-        first_player = self.players.pop(0)
-        self.players.append(first_player)
+        first_player = self.active_players.pop(0)
+        self.active_players.append(first_player)
 
-        self.highest_bidder = self.players[0]  # Player with highest bid
-        self.active_players = self.players
+        self.highest_bidder = self.active_players[0]  # Player with highest bid
 
 
     def board_to_str(self):
@@ -269,6 +270,8 @@ class Game(object):
         print("PLAYERS:")
         for player in self.players:
             print(player)
+        print("BOARD:")
+        print(self.board)
 
 
 
