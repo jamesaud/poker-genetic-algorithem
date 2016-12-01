@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="43f54c2a-3cac-4ad3-8bf0-39636731ae44" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Player.py" afterPath="$PROJECT_DIR$/Player.py" />
-    </list>
+    <list default="true" id="43f54c2a-3cac-4ad3-8bf0-39636731ae44" name="Default" comment="" />
     <ignored path="B351FinalProject.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -36,7 +34,7 @@
       <file leaf-file-name="Player.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Player.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
+            <state relative-caret-position="3675">
               <caret line="245" column="18" selection-start-line="245" selection-start-column="8" selection-end-line="245" selection-end-column="18" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
@@ -570,7 +568,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Player.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
+        <state relative-caret-position="3675">
           <caret line="245" column="18" selection-start-line="245" selection-start-column="8" selection-end-line="245" selection-end-column="18" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
