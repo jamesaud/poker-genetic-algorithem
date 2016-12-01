@@ -95,6 +95,7 @@ class Game(object):
     Changs the players turn and removes any players who fold
     """
     def make_player_turn(self, bet, player):
+
         turn = self.turn
         len_active_players = len(self.active_players)
 
@@ -179,7 +180,7 @@ class Game(object):
         """
         petty = player.owes + petty
 
-        if (bet == bet_status.FOLD) and len(self.active_players) == 1:
+        if (bet == bet_status.FOLD) and (len(self.active_players) == 1):
             bet = self.owes
 
         if (bet < petty):
@@ -199,9 +200,12 @@ class Game(object):
 
     def run_round(self):
         while True:
-            print("TURN:",self.turn)
+            #print(self.turn, len(self.active_players) - 1)
             if len(self.active_players) <= 1:
                 break
+
+            # Fix for Bad Code
+            if self.turn > (len(self.active_players)-1): self.turn = 0
 
             if (self.current_turn() == self.highest_bidder):
                 break
@@ -283,6 +287,7 @@ class Game(object):
 
 
     def print_game(self):
+
         print("\n")
         print("TABLE CARDS:")
         print(self.board)
