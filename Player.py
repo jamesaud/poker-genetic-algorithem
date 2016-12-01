@@ -135,29 +135,30 @@ class Game(object):
         def value_bet():
             if (self.board == []):
                 if (player.hand.cards[0].rank == player.hand.cards[1].rank):
-                    return 4
+                    return int(4 + (10 * player.risk))
                 if (player.hand.cards[1].rank == 'K' or player.hand.cards[1].rank == 'J' or 
                     player.hand.cards[1].rank == 'Q' or player.hand.cards[1].rank == 'A' or
                     player.hand.cards[0].rank == 'K' or player.hand.cards[0].rank == 'J' or 
                     player.hand.cards[0].rank == 'Q' or player.hand.cards[0].rank == 'A'):
-                    return 3
+                    return int(3 + (10 * player.risk))
                 elif (self.bet != 0):
                     if (player.risk > 0):
                         return self.bet
                     else: return bet_status.FOLD
                 else: return 0
-            value = 7462 - evaluate(self.board_to_str(), player.hand_to_str()) + (1000 * player.bluff)
-            pot = self.pot
-            money = player.money
-            bet = value / 7462
-            threshold = value - (1000 * player.risk)
-            if (threshold > 6000 and self.bet > 0):
-                return bet_status.FOLD
-            if (pot > (money / 4)):
-                bet = (int)(bet + (bet * player.risk)) * 50
             else:
-                bet = (int)(bet + (bet * player.risk)) * 25
-            return bet
+                value = 7462 - evaluate(self.board_to_str(), player.hand_to_str()) + (1000 * player.bluff)
+                pot = self.pot
+                money = player.money
+                bet = value / 7462
+                threshold = value - (1000 * player.risk)
+                if (threshold > 6000 and self.bet > 0):
+                    return bet_status.FOLD
+                if (pot > (money / 4)):
+                    bet = (int)(bet * player.risk) * 50
+                else:
+                    bet = (int)(bet * player.risk) * 25
+                return bet
         bet = value_bet()
         if (bet == bet_status.FOLD):
             return bet
