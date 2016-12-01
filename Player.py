@@ -129,36 +129,33 @@ class Game(object):
         player.owes = 0
 
 
-
-
     def player_bet(self, player):
         def value_bet():
             if (self.board == []):
                 if (player.hand.cards[0].rank == player.hand.cards[1].rank):
-                    return int(4 + (10 * player.risk))
-                if (player.hand.cards[1].rank == 'K' or player.hand.cards[1].rank == 'J' or 
+                    return 4
+                if (player.hand.cards[1].rank == 'K' or player.hand.cards[1].rank == 'J' or
                     player.hand.cards[1].rank == 'Q' or player.hand.cards[1].rank == 'A' or
-                    player.hand.cards[0].rank == 'K' or player.hand.cards[0].rank == 'J' or 
+                    player.hand.cards[0].rank == 'K' or player.hand.cards[0].rank == 'J' or
                     player.hand.cards[0].rank == 'Q' or player.hand.cards[0].rank == 'A'):
-                    return int(3 + (10 * player.risk))
+                    return 3
                 elif (self.bet != 0):
                     if (player.risk > 0):
                         return self.bet
                     else: return bet_status.FOLD
                 else: return 0
+            value = 7462 - evaluate(self.board_to_str(), player.hand_to_str()) + (1000 * player.bluff)
+            pot = self.pot
+            money = player.money
+            bet = value / 7462
+            threshold = value - (1000 * player.risk)
+            if (threshold > 6000 and self.bet > 0):
+                return bet_status.FOLD
+            if (pot > (money / 4)):
+                bet = (int)(bet + (bet * player.risk)) * 50
             else:
-                value = 7462 - evaluate(self.board_to_str(), player.hand_to_str()) + (1000 * player.bluff)
-                pot = self.pot
-                money = player.money
-                bet = value / 7462
-                threshold = value - (1000 * player.risk)
-                if (threshold > 6000 and self.bet > 0):
-                    return bet_status.FOLD
-                if (pot > (money / 4)):
-                    bet = (int)(bet * player.risk) * 50
-                else:
-                    bet = (int)(bet * player.risk) * 25
-                return bet
+                bet = (int)(bet + (bet * player.risk)) * 25
+            return bet
         bet = value_bet()
         if (bet == bet_status.FOLD):
             return bet
@@ -166,8 +163,76 @@ class Game(object):
         if (bet < 2):
             bet = 0
         return bet
-
-    def enforce_bet(self, bet, player, petty=10):
+    '''
+    def player_bet(self, player):
+        owes_bet = player.owes > 0
+        large_risk = player.risk > 0
+        large_bluff = player.bluff > 0
+        def judge_initial_cards():
+            if (player.hand.cards[0].rank == player.hand.cards[1].rank):
+                if (player.hand.cards[0].rank == 'A' or player.hand.cards[0].rank == 'K' or
+                    player.hand.cards[0].rank == 'Q' or player.hand.cards[0].rank == 'J'):
+                    if (owes_bet):
+                        return max(player.owes, player.owes + (5 * player.risk))
+                    elif (large_risk):
+                        return 20 * player.risk
+                    else: return 5
+                elif (player.hand.cards[0].rank == 'T' or player.hand.cards[0].rank == '9' or
+                      player.hand.cards[0].rank == '7' or player.hand.cards[0].rank == '7'):
+                    if (owes_bet):
+                        return max(player.owes, player.owes + (2 * player.risk))
+                    else: return 8 * player.risk
+                else:
+                    if (large_risk):
+                        return 10 * player. risk
+                    else: return  player.owes
+            elif (player.hand.cards[1].rank == 'K' or player.hand.cards[1].rank == 'J' or
+                  player.hand.cards[1].rank == 'Q' or player.hand.cards[1].rank == 'A' or
+                  player.hand.cards[0].rank == 'K' or player.hand.cards[0].rank == 'J' or
+                  player.hand.cards[0].rank == 'Q' or player.hand.cards[0].rank == 'A'):
+                if (owes_bet):
+                    if (large_risk and large_bluff):
+                        return player.owes + (5 * player.risk)
+                    elif (player.risk > -0.3):
+                        return player.owes
+                    else: return bet_status.FOLD
+                elif (large_risk):
+                    return 10 * player.risk
+                else: return 0
+            else:
+                if (owes_bet):
+                    if (large_bluff):
+                        return max(player.owes + ((10 * player.risk)), player.owes)
+                    else: return bet_status.FOLD
+                else:
+                    if (large_bluff):
+                        return max((10 * player.risk), 0)
+                    else: return 0
+        def value_bet():
+            value = 7462 - evaluate(self.board_to_str(), player.hand_to_str()) + (1000 * player.bluff)
+            pot = self.pot
+            money = player.money
+            bet = value / 1080
+            if (owes_bet):
+                if(value > 4000 or (pot > (money / 4))):
+                    if(large_risk or large_bluff):
+                        return player.owes + ((bet * 20) * player.risk)
+                    if(large_risk):
+                        return player.owes + ((bet * 10) * player.risk)
+                    else: return player.owes
+                elif(large_risk or large_bluff):
+                    return player.owes
+                else:
+                    return bet_status.FOLD
+            elif(large_risk):
+                return 20 * player.risk
+            else:
+                return 0
+        if (self.board == []):
+            return judge_initial_cards()
+        return value_bet()
+        '''
+    def enforce_bet(self, bet, player, petty=3):
         """
         Enfore rules for the player bet.
         1. If the bet is more than the players money, remake the bet to their max money.
