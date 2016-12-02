@@ -238,7 +238,7 @@ class Game(object):
             else:
                 return 0
         if (self.board == []):    
-            return player.owes
+            return 0
             #return judge_initial_cards()
             #hand = [card_to_string(player.hand.cards[0])]
             #board = [card_to_string(player.hand.cards[1])]
@@ -286,12 +286,11 @@ class Game(object):
                 break
 
             # Fix for Bad Code
-            if self.turn > (len(self.active_players)-1): 
-                self.turn = 0
+            if self.turn > (len(self.active_players)-1): self.turn = 0
 
             if (self.current_turn() == self.highest_bidder):
                 break
-            print(self.highest_bidder)
+
 
             player = self.current_turn()
             bet = self.player_bet(player)
