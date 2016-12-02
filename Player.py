@@ -21,13 +21,14 @@ class Player(object):
     """
     hand: List of Cards
     """
-    def __init__(self, name, bluff, risk, money):
+    def __init__(self, name, bluff, risk, money, divisor=4):
         self.hand = PokerHand([], False)
         self.name = name
         self.bluff = bluff
         self.risk = risk
         self.money = money
         self.owes = 0
+        self.divisor = divisor
 
     def add_card(self, card):
         self.hand.cards.append(card)
@@ -166,56 +167,52 @@ class Game(object):
     '''
     def player_bet(self, player):
         owes_bet = player.owes > 0
-        large_risk = player.risk > 0
-        large_bluff = player.bluff > .5
+        amount_available = player.money / player.divisor
         def judge_initial_cards():
             if (player.hand.cards[0].rank == player.hand.cards[1].rank):
                 if (player.hand.cards[0].rank == 'A' or player.hand.cards[0].rank == 'K' or
-                    player.hand.cards[0].rank == 'Q' or player.hand.cards[0].rank == 'J'):
+                    player.hand.cards[0].rank == 'Q' or player.hand.cards[0].rank == 'J' or
+                    player.hand.cards[0].rank == 'T' or player.hand.cards[0].rank == '9' or
+                    player.hand.cards[0].rank == '8' or player.hand.cards[0].rank == '7'):
                     if (owes_bet):
-                        return max(player.owes, player.owes + (10 * player.risk))
-                    elif (large_risk):
-                        return 10 + (20 * player.risk)
-                    else: return 7
-                elif (player.hand.cards[0].rank == 'T' or player.hand.cards[0].rank == '9' or
-                      player.hand.cards[0].rank == '8' or player.hand.cards[0].rank == '7'):
-                    if (owes_bet):
-                        return max(player.owes, player.owes + (2 * player.risk))
-                    else: return 8 + (8 * player.risk)
+                        return max(player.owes, player.owes + (amount_available * player.risk))
+                    else:
+                        return amount_available + (amount_available * player.risk)
                 else:
-                    if (large_risk):
-                        return 7 + (10 * player. risk)
-                    else: return  player.owes
+                    check = random.random()
+                    if (owes_bet):
+                        if (check < player.bluff):
+                            return player.owes + (amount_available * player.risk)
+                        else: return player.owes
+                    else:
+                        if (check < player.bluff):
+                            return (amount_available * player.risk)
+                        else: return 0
             elif (player.hand.cards[1].rank == 'K' or player.hand.cards[1].rank == 'J' or
                   player.hand.cards[1].rank == 'Q' or player.hand.cards[1].rank == 'A' or
                   player.hand.cards[0].rank == 'K' or player.hand.cards[0].rank == 'J' or
                   player.hand.cards[0].rank == 'Q' or player.hand.cards[0].rank == 'A'):
                 check = random.random()
                 if (owes_bet):
-                    if (large_risk and large_bluff and check < player.risk):
-                        print("Player raised based on a high card")
-                        return player.owes + (5 * player.risk)
+                    if (check < player.risk):
+                        return max(player.owes, player.owes + (amount_available * player.risk))
 
-                    elif (check < player.risk):
-                        print("Player matched the bet based on a high card")
+                    elif (check < player.bluff):
                         return player.owes
-                    
                     else:
-                        print ("Player folded with a high card")
                         return bet_status.FOLD
                 elif (check < player.risk):
-                    print ("Player made a bet with a high card")
-                    return 5 + (10 * player.risk)
+                    return amount_available + (amount_available * player.risk)
                 else: return 0
             else:
                 check = random.random()
                 if (owes_bet):
-                    if (large_bluff and check < player.bluff):
-                        return max(player.owes + ((10 * player.risk)), player.owes)
+                    if (check < player.bluff):
+                        return max(player.owes + (amount_available * player.risk), player.owes)
                     else: return bet_status.FOLD
                 else:
-                    if (large_bluff):
-                        return max(10 + (20 * player.risk), 0)
+                    if (check < player.bluff):
+                        return max((amount_available * player.risk), 0)
                     else: return 0
         def value_bet(value):
             value = 7462 - evaluate(self.board_to_str(), player.hand_to_str()) + (1000 * player.bluff)
