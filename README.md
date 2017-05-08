@@ -1,12 +1,14 @@
-# B351FinalProject
-AI project to use a Neural Network to do something...
+# Genetic Poker Algorithem with Heuristics
+AI project to use a Genetic Algorithems to Play Poker (terrible idea to do, in the end, but fun to explore genetic algorithems)
+
+Please run Evaluator.py to see the pretty results on a graph!
+
 
 Ben Boskin
 
 James Audretsch
 
 Dian Zhi
-
 
 
 # Important Links:
