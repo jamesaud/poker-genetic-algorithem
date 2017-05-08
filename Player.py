@@ -1,8 +1,11 @@
+from __future__ import print_function
 from pokercards.cards import *
 import deuces
 import copy
 
 evaluator = deuces.Evaluator()
+import random
+
 
 def evaluate(board, hand):
     board = [deuces.Card.new(card) for card in board]
@@ -14,21 +17,25 @@ def card_to_string(card):
     return card.rank + card.suit.lower()
 
 class bet_status(object):
-    FOLD = "FOLD"
+    FOLD = -1
 
 
 class Player(object):
     """
     hand: List of Cards
     """
-    def __init__(self, name, bluff, risk, money, divisor=4):
+    def __init__(self, name, money, c1, c2, c3, bluff, risk, divisor, pot_divisor):
         self.hand = PokerHand([], False)
-        self.name = name
-        self.bluff = bluff
+        self.name = str(name)
         self.risk = risk
-        self.money = money
-        self.owes = 0
+        self.bluff = bluff
+        self.c1 = c1
+        self.c2 = c2
+        self.c3 = c3
         self.divisor = divisor
+        self.money = money
+        self.pot_divisor = pot_divisor
+        self.owes = 0
 
     def add_card(self, card):
         self.hand.cards.append(card)
@@ -41,23 +48,31 @@ class Player(object):
         return [card_to_string(card) for card in self.hand.cards]
 
     def __str__(self):
-        return str([self.name, self.hand, self.money])
+        return str([self.name, self.hand, self.money, self.c1, self.c2, self.c3])
 
     def __repr__(self):
-        return "Player(" + str([self.name, self.hand, self.money])[1:-1] + ")"
+        return "Player(" + str([self.name, self.hand, self.money,  self.c1, self.c2, self.c3])[1:-1] + ")"
 
+    def __eq__(self, other):
+        if other is None:
+            return False
+        return self.name == other.name
+
+    def __hash__(self):
+        return hash(self.name)
 
 
 class Game(object):
 
-    def __init__(self, number_players, anti=0):
+    def __init__(self, list_players, anti=10):
         # Initialize Deck
         self.deck = Deck()
         self.deck.shuffle()
 
         self.board = []
 
-        self.players = self.create_players(number_players)
+        #self.players = self.create_players(number_players)
+        self.players = list_players
         self.active_players = copy.copy(self.players)
 
         self.pot = 0
@@ -67,13 +82,10 @@ class Game(object):
         self.highest_bidder = None # Player with highest bid
         self.round_started = True
         self.game_over = False
+        self.rounds = 0
 
-    def create_players(self, number):
-        player_list = [] # List of Players
-        for i in range(number):
-            player = Player(str(i), .5, .5, 100)
-            player_list.append(player)
-        return player_list
+
+        self.liveprint = False
 
     def deal(self):
         for player in self.players:
@@ -96,16 +108,12 @@ class Game(object):
     Changs the players turn and removes any players who fold
     """
     def make_player_turn(self, bet, player):
-
+        #print("IM STUCK", self.turn, self.active_players, self.highest_bidder)
         turn = self.turn
         len_active_players = len(self.active_players)
 
-        if bet < player.owes:
-            bet = bet_status.FOLD
-
-
-        if (bet == bet_status.FOLD) and (player.owes == 0):
-            return None
+        if self.highest_bidder not in self.active_players:
+            self.highest_bidder = None
 
         # Fold, Match, or Raise
         if bet == bet_status.FOLD: # Fold
@@ -115,7 +123,6 @@ class Game(object):
 
         elif bet == player.owes:
             self.turn = (turn + 1) % len_active_players
-
 
         else:
             self.highest_bidder = player
@@ -129,122 +136,134 @@ class Game(object):
         player.money -= bet
         player.owes = 0
 
-        '''
-    def player_bet(self, player):
-        def value_bet():
-            if (self.board == []):
-                if (player.hand.cards[0].rank == player.hand.cards[1].rank):
-                    return 4
-                if (player.hand.cards[1].rank == 'K' or player.hand.cards[1].rank == 'J' or
-                    player.hand.cards[1].rank == 'Q' or player.hand.cards[1].rank == 'A' or
-                    player.hand.cards[0].rank == 'K' or player.hand.cards[0].rank == 'J' or
-                    player.hand.cards[0].rank == 'Q' or player.hand.cards[0].rank == 'A'):
-                    return 3
-                elif (self.bet != 0):
-                    if (player.risk > 0):
-                        return self.bet
-                    else: return bet_status.FOLD
-                else: return 0
-            value = 7462 - evaluate(self.board_to_str(), player.hand_to_str()) + (1000 * player.bluff)
-            pot = self.pot
-            money = player.money
-            bet = value / 7462
-            threshold = value - (1000 * player.risk)
-            if (threshold > 6000 and self.bet > 0):
-                return bet_status.FOLD
-            if (pot > (money / 4)):
-                bet = (int)(bet + (bet * player.risk)) * 50
-            else:
-                bet = (int)(bet + (bet * player.risk)) * 25
-            return bet
-        bet = value_bet()
-        if (bet == bet_status.FOLD):
-            return bet
-            bet = player.money
-        if (bet < 2):
-            bet = 0
-        return bet
-    '''
     def player_bet(self, player):
         owes_bet = player.owes > 0
         amount_available = player.money / player.divisor
+        will_bluff = random.random() < player.bluff
+
+        def bluff():
+            return random.random() < player.bluff
+
         def judge_initial_cards():
+            amount = 0
+            big_bet = (amount_available * player.risk)
             if (player.hand.cards[0].rank == player.hand.cards[1].rank):
                 if (player.hand.cards[0].rank == 'A' or player.hand.cards[0].rank == 'K' or
-                    player.hand.cards[0].rank == 'Q' or player.hand.cards[0].rank == 'J' or
-                    player.hand.cards[0].rank == 'T' or player.hand.cards[0].rank == '9' or
-                    player.hand.cards[0].rank == '8' or player.hand.cards[0].rank == '7'):
+                            player.hand.cards[0].rank == 'Q' or player.hand.cards[0].rank == 'J' or
+                            player.hand.cards[0].rank == 'T' or player.hand.cards[0].rank == '9' or
+                            player.hand.cards[0].rank == '8' or player.hand.cards[0].rank == '7'):
                     if (owes_bet):
-                        return max(player.owes, player.owes + (amount_available * player.risk))
+                        amount = max(player.owes, player.owes + big_bet)
                     else:
-                        return amount_available + (amount_available * player.risk)
+                        amount = amount_available + big_bet
                 else:
-                    check = random.random()
                     if (owes_bet):
-                        if (check < player.bluff):
-                            return player.owes + (amount_available * player.risk)
-                        else: return player.owes
+                        if (will_bluff):
+                            amount = player.owes + big_bet
+                        else:
+                            amount = player.owes
                     else:
-                        if (check < player.bluff):
-                            return (amount_available * player.risk)
-                        else: return 0
+                        if (will_bluff):
+                            amount = (amount_available * player.risk)
+                        else:
+                            amount = 0
             elif (player.hand.cards[1].rank == 'K' or player.hand.cards[1].rank == 'J' or
-                  player.hand.cards[1].rank == 'Q' or player.hand.cards[1].rank == 'A' or
-                  player.hand.cards[0].rank == 'K' or player.hand.cards[0].rank == 'J' or
-                  player.hand.cards[0].rank == 'Q' or player.hand.cards[0].rank == 'A'):
+                          player.hand.cards[1].rank == 'Q' or player.hand.cards[1].rank == 'A' or
+                          player.hand.cards[0].rank == 'K' or player.hand.cards[0].rank == 'J' or
+                          player.hand.cards[0].rank == 'Q' or player.hand.cards[0].rank == 'A'):
                 check = random.random()
                 if (owes_bet):
                     if (check < player.risk):
-                        return max(player.owes, player.owes + (amount_available * player.risk))
+                        amount =  max(player.owes, player.owes + big_bet)
 
-                    elif (check < player.bluff):
-                        return player.owes
+                    elif (will_bluff):
+                        amount =  player.owes
                     else:
-                        return bet_status.FOLD
+                        amount =  bet_status.FOLD
                 elif (check < player.risk):
-                    return amount_available + (amount_available * player.risk)
-                else: return 0
+                    amount =  amount_available * player.risk
+                else:
+                    amount =  0
             else:
-                check = random.random()
                 if (owes_bet):
-                    if (check < player.bluff):
-                        return max(player.owes + (amount_available * player.risk), player.owes)
-                    else: return bet_status.FOLD
+                    if (will_bluff):
+                        amount = player.owes + big_bet
+                    else:
+                        amount =  bet_status.FOLD
                 else:
-                    if (check < player.bluff):
-                        return max((amount_available * player.risk), 0)
-                    else: return 0
-        def value_bet(value):
-            value = 7462 - evaluate(self.board_to_str(), player.hand_to_str()) + (1000 * player.bluff)
-            pot = self.pot
-            money = player.money
-            bet = value / 1080
-            if (owes_bet):
-                if(value > 4000 or (pot > (money / 4))):
-                    if(large_risk or large_bluff):
-                        return player.owes + ((bet * 20) * player.risk)
-                    if(large_risk):
-                        return player.owes + ((bet * 10) * player.risk)
-                    else: return player.owes
-                elif(large_risk or large_bluff):
-                    return player.owes
-                else:
-                    return bet_status.FOLD
-            elif(large_risk):
-                return 20 * player.risk
-            else:
-                return 0
-        if (self.board == []):    
-            return player.owes
-            #return judge_initial_cards()
-            #hand = [card_to_string(player.hand.cards[0])]
-            #board = [card_to_string(player.hand.cards[1])]
-            #value = evaluate(player.hand_to_str(), [])
-            #value = 7462 - evaluate(hand, board) + (1000 * player.bluff)
-        else:
-            return value_bet(value)
+                    if (will_bluff):
+                        amount = amount_available * player.risk
+                    else:
+                        amount =  0
+            return amount
 
-    def enforce_bet(self, bet, player, petty=3):
+
+        def smart_bet():
+            multiplier = 1
+            value_mult = value_bet() / 7462
+
+            if self.pot > (player.money * player.pot_divisor):
+                multiplier += player.risk
+
+            if (will_bluff and (value_mult > player.risk)):
+                multiplier += player.risk
+
+            multiplier += value_mult
+            bet = amount_available * multiplier
+
+            lower_bound = (player.owes - self.anti)
+
+            if (bet > lower_bound) and (bet < player.owes):
+                bet = player.owes
+
+            return bet
+
+
+
+        def value_bet():
+            return evaluate(self.board_to_str(), player.hand_to_str())
+
+        def round_one():
+            if len(self.board) == 3: return True
+
+        def round_two():
+            if len(self.board) == 4: return True
+
+        def round_three():
+            if len(self.board) == 5: return True
+
+        def make_bet():
+            bet = bet_status.FOLD
+
+            if round_one():
+                cutoff = player.c1
+
+            if round_two():
+                cutoff = player.c2
+
+            if round_three():
+                cutoff = player.c3
+
+            if value_bet() < cutoff:
+                bet = smart_bet()
+                #print("IM SMART IM GONNA BET", bet)
+
+            return bet
+
+
+
+        if (self.board == []):
+            bet = judge_initial_cards()
+           # print("IM BETTING on round 1:", bet)
+
+        else:
+            bet = make_bet()
+           # print("IM BETTING on round 234:", bet)
+
+
+        return bet
+
+    def enforce_bet(self, bet, player):
         """
         Enfore rules for the player bet.
         1. If the bet is more than the players money, remake the bet to their max money.
@@ -256,13 +275,16 @@ class Game(object):
         :param player: Player, the current player who is betting
         :return: int, the enforced bet
         """
-        petty = player.owes + petty
+        petty = self.anti
 
         if (bet == bet_status.FOLD) and (len(self.active_players) == 1):
-            bet = self.owes
-
-        if (bet < petty):
             bet = player.owes
+
+        if (bet == bet_status.FOLD) and (player.owes == 0):
+            bet = player.owes
+
+        if bet == bet_status.FOLD:
+            return bet
 
         if bet > player.money:
             bet = player.money
@@ -270,32 +292,74 @@ class Game(object):
         if bet < player.owes:
             bet = bet_status.FOLD
 
-        return bet
+        if (bet < (player.owes + petty) ):
+            bet = player.owes
+
+        if bet == bet_status.FOLD:
+            return bet
+
+        return int(bet)
 
 
     def current_turn(self):
         return self.active_players[self.turn]
 
     def run_round(self):
+        self.highest_bidder = None
         while True:
-            #print(self.turn, len(self.active_players) - 1)
             if len(self.active_players) <= 1:
                 break
 
             # Fix for Bad Code
-            if self.turn > (len(self.active_players)-1): 
+            if self.turn > (len(self.active_players)-1):
                 self.turn = 0
 
             if (self.current_turn() == self.highest_bidder):
                 break
-            print(self.highest_bidder)
 
             player = self.current_turn()
             bet = self.player_bet(player)
-            bet = self.enforce_bet(bet, player, 2)
+            bet = self.enforce_bet(bet, player)
             self.make_player_turn(bet, player)
 
-            if not self.highest_bidder:
+            if self.highest_bidder is None:
+                self.highest_bidder = player
+
+        if len(self.board) == 0:
+            self.add_to_board(initial=True)
+            self.run_round()
+
+        elif len(self.board) < 5:
+            self.add_to_board()
+            self.run_round()
+
+        else:
+            self.finish()
+
+    def run_round(self):
+        self.print_live(cards=True)
+
+        self.highest_bidder = None
+        while True:
+            if len(self.active_players) <= 1:
+                break
+
+            # Fix for Bad Code
+            if self.turn > (len(self.active_players)-1):
+                self.turn = 0
+
+            if (self.current_turn() == self.highest_bidder):
+                break
+
+            player = self.current_turn()
+            bet = self.player_bet(player)
+            bet = self.enforce_bet(bet, player)
+
+
+            self.print_live(cards=False, name=player.name, bet=bet)
+            self.make_player_turn(bet, player)
+
+            if self.highest_bidder is None:
                 self.highest_bidder = player
 
         if len(self.board) == 0:
@@ -310,20 +374,37 @@ class Game(object):
             self.finish()
 
     def find_best_player(self):
-        best_player, best_score = None, -1
+        best_player, best_score = None, 8000
         board = self.board_to_str()
-
         for player in self.active_players:
             score = evaluate(board, player.hand_to_str())
-            if score > best_score:
+            if score < best_score:
                 best_score, best_player = score, player
         return best_player
+
+
+    def find_wealthiest(self):
+        best = -1
+        best_player = None
+        for player in self.players:
+            if player.money > best:
+                best_player = player
+                best = player.money
+        return best_player
+
 
     def finish(self):
         best_player = self.find_best_player()
         best_player.money += self.pot
-        self.print_game()
+        self.print_live(finish=True)
+        #print(self.players)
+
+        self.rounds += 1
+        if self.rounds > 100:
+            self.game_over = True
+
         self.reset()
+
 
 
     def reset(self):
@@ -335,6 +416,15 @@ class Game(object):
         self.turn = 0
 
 
+        def make_anti():
+            for player in self.players:
+                if player.money < 10:
+                    self.pot += player.money
+                    player.money = 0
+                else:
+                    player.money -= 10
+                    self.pot += 10
+
         def remove_players():
             active_players = []
             for player in self.players:
@@ -342,12 +432,15 @@ class Game(object):
                     active_players.append(player)
             return active_players
 
+
+        make_anti()
         self.active_players = remove_players()
+
 
 
         for player in self.players:
             player.empty_hand()
-            player.owes = self.anti
+            player.owes = 0
 
 
         if len(self.active_players) == 1:
@@ -376,6 +469,46 @@ class Game(object):
         print("BOARD:")
         print(self.board)
 
+    def print_live(self, cards=True, name=None, bet=None, finish=False):
+        if not self.liveprint:
+            return
+
+        def deuce_cards(cards):
+            return [deuces.Card.new(card) for card in cards]
+
+        if finish:
+            winner = self.find_best_player()
+            score = evaluate(self.board_to_str(), winner.hand_to_str())
+            win_class = evaluator.class_to_string(evaluator.get_rank_class(score))
+            print("Player {0} won with hand rank = {1} ({2})\n".format(winner.name, score, win_class))
+
+        elif cards:
+            if self.board == []:
+                print("PLAYERS CARDS:")
+                response = ''
+                for player in self.active_players:
+                    cards = deuce_cards(player.hand_to_str())
+                    response += player.name + " : "
+                    print(response, end=" ")
+                    deuces.Card.print_pretty_cards(cards)
+                    response = ''
+
+            elif len(self.board) <= 5:
+                cards = deuce_cards(self.board_to_str())
+                print("BOARD CARDS:", end=" ")
+                deuces.Card.print_pretty_cards(cards)
+        else:
+            if bet == bet_status.FOLD:
+                bet = 'FOLD'
+            if bet == 0:
+                bet = 'PASS'
+            print(name, "bets", bet)
+
+
+    def run_game(self):
+        while not self.game_over:
+            self.deal()
+            self.run_round()
 def main():
     game = Game(4)
 
